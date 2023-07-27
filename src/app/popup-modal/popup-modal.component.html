@@ -1,0 +1,228 @@
+<div class="bg-transparent" style="margin-top: 20px;margin-left: 20px;margin-right: 20px;margin-bottom: 20px;">
+    <div class="example-header-image" mat-card-avatar></div>
+    <span style="float:right;margin-top:-10px;margin-right:0px;" (click)="onClose()"><i
+            class="fa fa-window-close text-primary" aria-hidden="true"></i></span>
+    <span class="text-primary" style="margin-left: 10px;font-size: large;">Meeting Details</span>
+    <hr style="color:blue;">
+    <div *ngIf="isAppoint">
+    <div class="input-group">
+        <div class="form-outline">
+          <input type="search" id="form1" class="form-control" [(ngModel)]="searchText" (keyup)="isOpen = !isOpen"
+            cdkOverlayOrigin #trigger="cdkOverlayOrigin" placeholder="User Name" style="width: 20rem;height:32px;" />
+        </div>
+        <button type="button" class="btn btn-primary btn-sm" (click)="appoint()" style="height: 38px;">
+         Add
+        </button>
+    </div>
+    
+    <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="isOpen"
+      (overlayOutsideClick)="isOpen = false">
+      <div class="card-deck bg-transparent d-flex align-items-center" style="max-width: 20rem;" id="filterResultSearch">
+        <div class="card-body text-info">
+          <div class="card-deck bg-light p-2 shadow shadow-info shadow-intensity-lg rounded-3" style="margin-bottom: 5px;width: 20rem;margin-left: 0px;" *ngFor="let staff of optimizedSearchFiltering | appFilter: searchText;let i=index;" id="listText" (click)="getUsername(staff);">
+            <img [src]="staff.userImage" width="50px" height="50px"/>
+            <span style="padding-left:5px;"></span><label style="font-style: bold;font-size: 13px;" id="staffName">{{staff.username}}</label><span style="padding-left:5px;">(</span><label id="staffDepartment" style="font-size: 10px;">{{staff.departmentname}}</label>)
+          </div>   
+        </div>
+      </div>
+    </ng-template>
+</div>
+    <mat-tab-group mat-align-tabs="center" backgroundColor="primary">
+        <mat-tab label="Schedule">
+            <fieldset class="border border-primary rounded-5">
+                <legend class="w-auto" style="margin-top: -10px;font-size: 15px;">Details</legend>
+                <div style="font-size:small">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item">
+                            <div class="row">
+                                <div class="col-md-6">Title</div>
+                                <div class="col-md-6">
+                                    <div class="text-primary">{{title}}</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Description</div>
+                                <div class="col-md-6">
+                                    <div class="text-primary">{{description}}</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Start Date</div>
+                                <div class="col-md-6">
+                                    <div class="text-primary">{{start}}</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">End Date</div>
+                                <div class="col-md-6">
+                                    <div class="text-primary">{{end}}</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Meeting start at</div>
+                                <div class="col-md-6">
+                                    <div class="text-primary">{{start_time}}</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Approximately end at &nbsp;&nbsp;&nbsp;</div>
+                                <div class="col-md-6">
+                                    <div class="text-primary">{{approximated_end_time}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Edit
+              </a>
+              <div class="collapse" id="collapseExample">
+                <div class="card card-body">
+                    <div style="background-color: #1b79ff;height: 2px;margin-top: -15px;filter: drop-shadow(16px 16px 20px rgb(243, 237, 237));"></div>
+                 Title : <input type="text" class="form-input" [(ngModel)]="title" placeholder="Title" style="color: #1b79ff;"/>
+                 Description : <input type="text" clascs="form-input" [(ngModel)]="description" placeholder="Description" style="color: #1b79ff;"/>
+                 <button class="btn btn-primary btn-sm" (click)="update()">Add</button>
+                </div>
+              </div>
+        </mat-tab>
+        <mat-tab label="Attendee">
+            <fieldset class="border border-primary rounded-5">
+                <legend class="w-auto" style="margin-top: -10px;font-size: 15px;">Attendees</legend>
+                <div *ngFor="let attendee of attendees;let i=index;" style="margin-top: 5px;margin-left: 50px;"
+                    id="fieldsetborder">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <span style="color:blue;margin-right: 3px;"><i class="fa fa-user"></i></span>
+                                    <span style="color:blue;">{{attendee.uname}}</span>
+                                    <span> (</span><span style="color:blue;">{{attendee.teamName}}</span><span>)</span>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div *ngIf="attendee.userId == ownerId; else elseBlock" style="font-size: 10px;color:#8ca0bc;margin-left: 10px;">Event lead
+                                        </div>
+                                        <ng-template #elseBlock>
+                                            <div *ngIf="attendee.userId == currentLoginUserId; else otherwiseBlock" style="font-size: 10px;color:#8ca0bc;margin-left: 10px;">You are in this meeting.</div>
+                                        <ng-template #otherwiseBlock>
+                                                <div class="col-md-6" (click)="reAssign(attendee.userId)" id="btn_animate">
+                                                    <!-- <a style="color:blue;font-size: small;cursor:pointer;">Re-assign</a> -->
+                                                </div>
+                                                <div class="col-md-6" (click)="remove(attendee.userId)" id="btn_animate">
+                                                    <!-- <a style="color:red;font-size: small;cursor:pointer;">Remove</a> -->
+                                                </div>  
+                                        </ng-template>
+                                        </ng-template>
+
+                                    </div>
+                                </div>
+                              
+                                <!-- <div *ngIf="isLoginUser" class="col-md-6"><i><small style="text-primary">You are in this meeting.</small></i></div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <!-- <button (click)="addMember()" class="btn btn-primary">Add Member</button> -->
+        </mat-tab>
+        <mat-tab label="Meeting Materials" style="margin-bottom:400px;">
+            <fieldset class="border border-primary rounded-5">
+                <legend class="w-auto" style="margin-top: -10px;font-size: 15px;">Materials</legend>
+                <div *ngIf="!isAttachmentExist; else elseAttachment" style="position:absolute;top:15%;left:30%;bottom:15%;font-size: 10px;color:gray;font-style: italic;">Download Material has not insert yet.</div>
+                <ng-template #elseAttachment>
+                <ul class="text-primary"  *ngFor="let file of fileIdHost">
+                    <li>
+                        <div class="row">
+                            <div class="col-md-6">
+                        <a style="cursor:pointer;color:#1b79ff;" (click)="download(fileData,file.docName)">
+                            <i class="fa fa-download" style="color:#1b79ff"></i>{{file.docName}}</a>
+                        </div>
+                        <div class="col-md-6">
+                        <button (click)="download(file)" class="btn btn-primary btn-sm" color="primary">Download</button>
+                        <!-- <button (click)="fileRemove()" class="btn btn-danger btn-sm" color="primary"><i class="fa fa-trash-o" aria-hidden="true"></i></button> -->
+                    </div>
+                    <div class="col">
+                        <mat-progress-bar *ngIf="download$ | async as download"
+                                [mode]="download.state == 'PENDING' ? 'buffer' : 'determinate'" 
+                            [value]="download.progress">
+                        </mat-progress-bar>
+                       </div>
+                        </div>
+                    </li>
+                </ul>
+            </ng-template>
+            </fieldset>
+        <!-- <a class="btn btn-success btn-sm" color="primary" style="cursor:pointer;height: 32px;">Upload -->
+
+            <div class="row" style="margin-top:8px;">
+              
+                <div class="col-md-10">
+                  <div class="form-control">
+                    <div class="input-group mb-3">
+                        <div class="custom-file">
+                          <!-- <input type="file" class="form-control" id="inputGroupFile02" (change)="saveFile($event)" multiple="multiple" style="color:#1b79ff">
+                          <button for="inputGroupFile02" aria-describedby="inputGroupFileAddon02"></button> -->
+                        </div>
+                        <div class="input-group-append">
+                          <!-- <a class="btn btn-primary btn-sm" id="inputGroupFileAddon02" (click)="saveFiles()" style="cursor:pointer">Add</a> -->
+                        </div>
+                      </div>
+                    <!-- <input
+                      type="file"
+                      class=""
+                      id=""
+                      (change)="saveFile($event)"
+                      multiple="multiple"
+                    /> -->
+                    <!-- <a class="btn btn-success btn-sm" color="primary" style="cursor:pointer;height: 32px;">Add</a> -->
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                
+                <div class="col-md-10">
+                  <span
+                    class="sch-div"
+                    *ngFor="let url of urls; let index = index"
+                  >
+                    <div class="col-sm-8" style="color: #1b79ff;">
+                      {{ url }}
+                    </div>
+                    <div class="col-sm-4">
+                      <!-- <input
+                      type="button"
+                      class="btn btn-info"
+                      (click)="removeSelectedFile(index)"
+                      value="remove"
+                    /> -->
+
+                      <a (click)="removeSelectedFile(index)" style="color: red"
+                        >remove</a
+                      >
+                    </div>
+                  </span>
+                </div>
+              </div>
+              <!-- </a> -->
+        </mat-tab>
+    </mat-tab-group>
+    
+    <div class="footer-daily">
+        <div class="row">
+            <div class="col-md-6">
+                <span class="btn btn-outline-danger btn-sm" style="color:rgb(245, 71, 48);margin-right: 15px;" (click)="deletion()" id="btn_animate"
+                    mat-dialog-close>
+                    Delete <i class="fa fa-trash" id="btn_animate" style="color:rgb(245, 71, 48);font-size:15px;"></i>
+                </span>
+                <!-- <span style="color:rgb(14, 143, 36);" id="btn_animate" mat-dialog-close (click)="finish()">
+                    Finish <i class="fa fa-pencil-square" style="color:rgb(39, 146, 181);" id="btn_animate"></i>
+                </span> -->
+            </div>
+            <div class="col-md-6">
+                <span style="float:right;margin-right: 40px;"><Button mat-button
+                        class="btn btn-primary btn-sm" id="btn_animate" (click)="onClose()">Cancel</Button></span>
+            </div>
+        </div>
+    </div>
+</div>

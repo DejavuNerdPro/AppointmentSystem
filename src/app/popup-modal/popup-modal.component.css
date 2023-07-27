@@ -1,0 +1,57 @@
+*{
+    color:rgb(17, 6, 82);;
+}
+.example-header-image {
+    background-size: cover;
+    position: fixed;
+    left: 47%;
+    top: 9.5%;
+    z-index:0;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  mat-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  mat-progress-bar{
+    color:blue;
+  }
+  
+  .file {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  a:hover{
+    text-decoration: underline;
+  }
+
+  /* input[type="file"] {
+    cursor: pointer;
+    display: block;
+    height: 100%;
+    left: 0;
+    opacity: 0 !important;
+    position: absolute;
+    top: 0;
+    width: 50%;
+    min-width: 50%;
+    color: transparent;
+  } */
+  
+  .sch-div {
+    display: flex;
+  }
+
+ input[type="file"] {
+  cursor: pointer;
+    display: block;
+    left: 0;
+    position: absolute;
+    top: 0;
+} 

@@ -1,0 +1,170 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-6 mx-auto">
+        <div class="card">
+          <div class="card-header card-header-primary">
+            <h4 class="card-title">Add Employee Data</h4>
+            <p class="card-category">
+              Here is a subtitle for this employee data
+            </p>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group pt-3">
+                    <div class="input-field">
+                      <span class="fa fa-id-card p-2"> </span>
+                      <input
+                        type="text"
+                        placeholder="ID"
+                        class="form-control"
+                        formControlName="id"
+                        [(ngModel)]="employee.employeeId"
+                      />
+                    </div>
+                  </div>
+                  <small
+                    *ngIf="
+                      employeeForm.controls['id'].dirty &&
+                      employeeForm.hasError('required', 'id')
+                    "
+                    class="text-danger"
+                    >*ID is required.</small
+                  >
+
+                  <small
+                    *ngIf="
+                      employeeForm.controls['id'].dirty &&
+                      employeeForm.hasError('minlength', 'id')
+                    "
+                    class="text-danger"
+                    >*ID must be 4 digits.</small
+                  >
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group pt-3">
+                    <div class="input-field">
+                      <span class="fa fa-user p-2"> </span>
+                      <input
+                        type="text"
+                        placeholder="Name"
+                        class="form-control"
+                        formControlName="name"
+                        [(ngModel)]="employee.employeeName"
+                      />
+                    </div>
+                  </div>
+                  <small
+                    *ngIf="
+                      employeeForm.controls['name'].dirty &&
+                      employeeForm.hasError('required', 'name')
+                    "
+                    class="text-danger"
+                    >*Name is required.</small
+                  >
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <div class="input-field">
+                      <span class="fa fa-bars p-2"> </span>
+                      <select
+                        class="form-control select-class"
+                        id=""
+                        name=""
+                        (change)="onSelect($event)"
+                      >
+                        <option disabled selected>Select department</option>
+                        <option
+                          *ngFor="let departments of department"
+                          value="{{ departments.departmentId }}"
+                        >
+                          {{ departments.departmentName }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <div class="input-field">
+                      <span class="fa fa-bars p-2"> </span>
+                      <select
+                        class="form-control select-class"
+                        id=""
+                        name=""
+                        (change)="onSelect1($event)"
+                      >
+                        <option disabled selected>Select team</option>
+                        <option
+                          *ngFor="let teams of team"
+                          value="{{ teams.teamId }}"
+                        >
+                          {{ teams.teamName }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <div class="input-field">
+                      <span class="fa fa-briefcase p-2"> </span>
+                      <select
+                        class="form-control select-class"
+                        id=""
+                        name=""
+                        (click)="onSelectPosition($event)"
+                      >
+                        <option disabled selected>Select position</option>
+                        <option
+                          *ngFor="let positions of positionArr"
+                          value="{{ positions }}"
+                        >
+                          {{ positions }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <button
+                      type="reset"
+                      class="btn btn-fill btn-dark btn-block mt-4"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <button
+                      [disabled]="employeeForm.invalid"
+                      type="submit"
+                      class="btn btn-fill btn-primary btn-block mt-4"
+                    >
+                      Save
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
